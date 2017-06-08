@@ -1,7 +1,5 @@
 package com.github.jonatabecker.erl.fifo;
 
-import static com.github.jonatabecker.erl.fifo.Produtor.STATUS_DORMINDO;
-
 /**
  *
  * @author JonataBecker
@@ -11,15 +9,15 @@ public class Consumidor {
     public static final int STATUS_DORMINDO = 1;
     public static final int STATUS_TRABALHANDO = 2;
 
-    private final long pid;
+    private final String pid;
     private int status;
 
-    public Consumidor(long pid) {
+    public Consumidor(String pid) {
         this.pid = pid;
         this.status = STATUS_DORMINDO;
     }
 
-    public long getPid() {
+    public String getPid() {
         return pid;
     }
 

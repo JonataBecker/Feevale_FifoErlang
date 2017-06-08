@@ -1,8 +1,11 @@
 package com.github.jonatabecker.erl.gui;
 
+import com.github.jonatabecker.erl.Client;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,6 +27,7 @@ public class ConfiguracoesComponent extends JComponent {
     public ConfiguracoesComponent() {
         super();
         initGui();
+        initEvents();
     }
 
     private void initGui() {
@@ -32,6 +36,17 @@ public class ConfiguracoesComponent extends JComponent {
         add(buildForm(), BorderLayout.NORTH);        
         setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
     }
+    
+    private void initEvents() {
+        button.addActionListener((e) -> {
+            try {
+                Client.get().init();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+    } 
+    
     private JComponent buildForm() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1));

@@ -2,6 +2,8 @@ package com.github.jonatabecker.erl.fifo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -10,14 +12,14 @@ import java.util.List;
 public class Dados {
 
     private static Dados instance = null;
-    private final List<Consumidor> consumidores;
-    private final List<Produtor> produtores;
-    private final List<Trabalho> trabalhos;
+    private final Map<String, Consumidor> consumidores;
+    private final Map<String, Produtor> produtores;
+    private final Map<String, Trabalho> trabalhos;
     
     private Dados() {
-        this.consumidores = new ArrayList<>();
-        this.produtores = new ArrayList<>();
-        this.trabalhos = new ArrayList<>();
+        this.consumidores = new TreeMap<>();
+        this.produtores = new TreeMap<>();
+        this.trabalhos = new TreeMap<>();
     }
     
     public static Dados get() {
@@ -28,27 +30,39 @@ public class Dados {
     }
     
     public void addConsumidor(Consumidor consumidor) {
-        this.consumidores.add(consumidor);
+        this.consumidores.put(consumidor.getPid(), consumidor);
+    }
+    
+    public Consumidor getConsumidor(String pid) {
+        return this.consumidores.get(pid);
     }
     
     public List<Consumidor> getConsumidores() {
-        return consumidores;
+        return new ArrayList<>(consumidores.values());
     }
     
     public void addProdutor(Produtor produtor) {
-        this.produtores.add(produtor);
+        this.produtores.put(produtor.getPid(), produtor);
     }
-
+    
+    public Produtor getProdutor(String pid) {
+        return this.produtores.get(pid);
+    }
+    
     public List<Produtor> getProdutores() {
-        return produtores;
+        return new ArrayList<>(produtores.values());
     }
     
     public void addTrabalho(Trabalho trabalho) {
-        this.trabalhos.add(trabalho);
+        this.trabalhos.put(trabalho.getId(), trabalho);
     }
 
+    public Trabalho getTrabalho(String id) {
+        return this.trabalhos.get(id);
+    }
+    
     public List<Trabalho> getTrabalhos() {
-        return trabalhos;
+        return new ArrayList<>(trabalhos.values());
     }
         
 }

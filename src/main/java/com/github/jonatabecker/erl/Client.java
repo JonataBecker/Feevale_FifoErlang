@@ -5,44 +5,65 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author JonataBecker
  */
 public class Client {
-    public static void main(String[] args) throws Exception {
-        Socket connection = new Socket("localhost", 3000);
-        DataOutputStream output = new DataOutputStream(connection.getOutputStream());
-  
+
+    private Socket connection;
+    private DataOutputStream output;
+    private final ClientDados clientDados;
+    private static Client client;
+
+    private Client() {
+        this.clientDados = new ClientDados();
+    }
+
+    public void connect() {
+        try {
+            connection = new Socket("localhost", 3000);
+            output = new DataOutputStream(connection.getOutputStream());
+            input();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void input() {
         new Thread(() -> {
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                
-                
+                InputStreamReader r = new InputStreamReader(connection.getInputStream());
+                BufferedReader in = new BufferedReader(r);
                 while (true) {
                     String command = in.readLine();
-                    System.out.println("T:" + command);
+                    if (command == null) {
+                        return;
+                    }
+                    System.out.println("Commando:" + command);
+                    clientDados.parser(command);
                 }
-                
             } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
-        
-        }).start();
-        
-        
-        
-        
 
-        while(true) {
-            String st = "Send";
-            System.out.println(st);
-            output.writeBytes(st + "\n");
-            Thread.sleep(1000);
-            
+        }).start();
+    }
+
+    public void init() throws Exception {
+        output.writeBytes("init\n");
+    }
+
+    public void close() throws Exception {
+        output.writeBytes("close\n");
+    }
+
+    public static Client get() {
+        if (client == null) {
+            client = new Client();
+            client.connect();
         }
+        return client;
     }
 }

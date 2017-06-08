@@ -9,15 +9,15 @@ public class Produtor {
     public static final int STATUS_DORMINDO = 1;
     public static final int STATUS_TRABALHANDO = 2;
    
-    private final long pid;
+    private final String pid;
     private int status;
     
-    public Produtor(long pid) {
+    public Produtor(String pid) {
         this.pid = pid;
         this.status = STATUS_DORMINDO;
     }
 
-    public long getPid() {
+    public String getPid() {
         return pid;
     }
 
