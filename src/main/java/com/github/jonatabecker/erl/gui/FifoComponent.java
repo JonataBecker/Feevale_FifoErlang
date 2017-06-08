@@ -30,7 +30,7 @@ public class FifoComponent extends JComponent {
     }
     
     private JComponent buildTrabalho() {
-        return new TabalhoComponent();
+        return new TrabalhoComponent();
     }
     
 }

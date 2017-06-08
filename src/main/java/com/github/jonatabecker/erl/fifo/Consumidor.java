@@ -1,5 +1,7 @@
 package com.github.jonatabecker.erl.fifo;
 
+import static com.github.jonatabecker.erl.fifo.Produtor.STATUS_DORMINDO;
+
 /**
  *
  * @author JonataBecker
@@ -27,6 +29,10 @@ public class Consumidor {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+    
+    public String getStatusString() {
+        return status == STATUS_DORMINDO ? "Dormindo" : "Trabalhando";
     }
 
 }

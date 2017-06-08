@@ -1,10 +1,9 @@
 package com.github.jonatabecker.erl.gui;
 
 import com.github.jonatabecker.erl.fifo.Dados;
-import com.github.jonatabecker.erl.fifo.Produtor;
+import com.github.jonatabecker.erl.fifo.Trabalho;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -14,18 +13,17 @@ import javax.swing.JPanel;
  *
  * @author JonataBecker
  */
-public class ProdutorComponent extends JPanel {
+public class TrabalhoComponent extends JPanel {
 
-    public ProdutorComponent() {
+    public TrabalhoComponent() {
         super();
         initGui();
     }
 
     private void initGui() {
-        setPreferredSize(new Dimension(0, 150));
-        setBackground(new Color(189, 189, 189));
+        setBackground(new Color(158, 158, 158));
         setLayout(new BorderLayout());
-        JLabel label = new JLabel("Produtor");
+        JLabel label = new JLabel("Fila");
         label.setBorder(BorderFactory.createEmptyBorder(12, 5, 0, 0));
         add(label, BorderLayout.NORTH);
         new Thread(() -> {
@@ -36,20 +34,19 @@ public class ProdutorComponent extends JPanel {
                 repaint();
             }
         }).start();
-    }
+    }   
     
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        Color color = new Color(15037299);
-        Produtor produtor;
-        for (int i = 0; i < Dados.get().getProdutores().size(); i++) {
+        Color color = new Color(12312315);
+        Trabalho trabalho;
+        for (int i = 0; i < Dados.get().getTrabalhos().size(); i++) {
             g.setColor(color);
             g.fillRect(5 + 105 * i, 40, 100, 100);
-            produtor = Dados.get().getProdutores().get(i);
+            trabalho = Dados.get().getTrabalhos().get(i);
             g.setColor(Color.BLACK);
-            g.drawString("PID: " + produtor.getPid(), 10 + 105 * i, 55);
-            g.drawString("Status: " + produtor.getStatusString(), 10 + 105 * i, 75);
+            g.drawString(trabalho.getTempo() + " ms", 10 + 105 * i, 55);
         }
     }
     

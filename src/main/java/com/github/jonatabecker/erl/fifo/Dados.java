@@ -9,14 +9,22 @@ import java.util.List;
  */
 public class Dados {
 
+    private static Dados instance = null;
     private final List<Consumidor> consumidores;
     private final List<Produtor> produtores;
     private final List<Trabalho> trabalhos;
     
-    public Dados() {
+    private Dados() {
         this.consumidores = new ArrayList<>();
         this.produtores = new ArrayList<>();
         this.trabalhos = new ArrayList<>();
+    }
+    
+    public static Dados get() {
+        if (instance == null) {
+            instance = new Dados();
+        }
+        return instance;
     }
     
     public void addConsumidor(Consumidor consumidor) {
@@ -42,5 +50,5 @@ public class Dados {
     public List<Trabalho> getTrabalhos() {
         return trabalhos;
     }
-    
+        
 }

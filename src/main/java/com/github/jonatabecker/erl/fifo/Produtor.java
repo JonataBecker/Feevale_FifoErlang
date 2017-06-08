@@ -29,4 +29,8 @@ public class Produtor {
         this.status = status;
     }  
     
+    public String getStatusString() {
+        return status == STATUS_DORMINDO ? "Dormindo" : "Trabalhando";
+    }
+    
 }
