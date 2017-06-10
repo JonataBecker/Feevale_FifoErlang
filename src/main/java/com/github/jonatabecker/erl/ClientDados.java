@@ -21,9 +21,10 @@ public class ClientDados {
         this.commands.put("createConsumidor", new AddConsumidor());
         this.commands.put("iniciaProducao", new IniciaProducao());
         this.commands.put("finalizaProducao", new FinalizaProducao());
+        this.commands.put("iniciaConsumo", new IniciaConsumo());
+        this.commands.put("finalizaConsumo", new FinalizaConsumo());        
     }
    
-    
     public void parser(String data) {
         int index = data.indexOf('-');
         Command command = commands.get(data.substring(0, index));
@@ -61,7 +62,9 @@ public class ClientDados {
 
         @Override
         public void exec(String data) {
-            Dados.get().getProdutor(data).setStatus(Produtor.STATUS_TRABALHANDO);
+            String[] d = data.split("-");
+            Dados.get().getProdutor(d[0]).setStatus(Produtor.STATUS_TRABALHANDO);
+            Dados.get().addTrabalho(new Trabalho(d[1], 0));
         }
         
     }
@@ -72,7 +75,29 @@ public class ClientDados {
         public void exec(String data) {
             String[] d = data.split("-");
             Dados.get().getProdutor(d[0]).setStatus(Produtor.STATUS_DORMINDO);
-            Dados.get().addTrabalho(new Trabalho(d[1], 0));
+            Dados.get().getTrabalho(d[1]).setStatusProduzido();
+        }
+        
+    }
+  
+    private class IniciaConsumo implements Command {
+
+        @Override
+        public void exec(String data) {
+            String[] d = data.split("-");
+            Dados.get().getConsumidor(d[0]).setStatus(Consumidor.STATUS_TRABALHANDO);
+            Dados.get().getTrabalho(d[1]).setStatusConsumindo();
+        }
+        
+    }
+    
+    private class FinalizaConsumo implements Command {
+
+        @Override
+        public void exec(String data) {
+            String[] d = data.split("-");
+            Dados.get().getConsumidor(d[0]).setStatus(Consumidor.STATUS_DORMINDO);
+            Dados.get().removeTrabalho(d[1]);
         }
         
     }

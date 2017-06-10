@@ -64,5 +64,9 @@ public class Dados {
     public List<Trabalho> getTrabalhos() {
         return new ArrayList<>(trabalhos.values());
     }
+
+    public void removeTrabalho(String id) {
+        this.trabalhos.remove(id);
+    }
         
 }

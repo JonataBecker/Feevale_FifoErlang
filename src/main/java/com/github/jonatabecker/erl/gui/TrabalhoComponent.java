@@ -1,5 +1,6 @@
 package com.github.jonatabecker.erl.gui;
 
+import com.github.jonatabecker.erl.FifoErlang;
 import com.github.jonatabecker.erl.fifo.Dados;
 import com.github.jonatabecker.erl.fifo.Trabalho;
 import java.awt.BorderLayout;
@@ -21,7 +22,7 @@ public class TrabalhoComponent extends JPanel {
     }
 
     private void initGui() {
-        setBackground(new Color(158, 158, 158));
+        setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         JLabel label = new JLabel("Fila");
         label.setBorder(BorderFactory.createEmptyBorder(12, 5, 0, 0));
@@ -39,14 +40,19 @@ public class TrabalhoComponent extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        Color color = new Color(12312315);
-        Trabalho trabalho;
         for (int i = 0; i < Dados.get().getTrabalhos().size(); i++) {
-            g.setColor(color);
+            Trabalho trabalho = Dados.get().getTrabalhos().get(i);
+            g.setColor(FifoErlang.COLOR_DEFAULT);
+            if (trabalho.isStatusConsumindo()) {
+                g.setColor(ConsumidorComponent.COLOR);
+            }
+            if (trabalho.isStatusProduzindo()) {
+                g.setColor(ProdutorComponent.COLOR);
+            }
             g.fillRect(5 + 105 * i, 40, 100, 100);
-            trabalho = Dados.get().getTrabalhos().get(i);
             g.setColor(Color.BLACK);
-            g.drawString(trabalho.getTempo() + " ms", 10 + 105 * i, 55);
+            g.drawString(trabalho.getId(), 10 + 105 * i, 55);
+            g.drawString(trabalho.getTempo() + " ms", 10 + 105 * i, 70);
         }
     }
     

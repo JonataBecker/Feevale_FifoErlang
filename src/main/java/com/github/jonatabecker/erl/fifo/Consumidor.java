@@ -29,6 +29,10 @@ public class Consumidor {
         this.status = status;
     }
     
+    public boolean isTrabalhando() {
+        return this.status == STATUS_TRABALHANDO;
+    }
+    
     public String getStatusString() {
         return status == STATUS_DORMINDO ? "Dormindo" : "Trabalhando";
     }

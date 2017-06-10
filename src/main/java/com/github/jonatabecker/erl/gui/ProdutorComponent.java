@@ -1,5 +1,6 @@
 package com.github.jonatabecker.erl.gui;
 
+import com.github.jonatabecker.erl.FifoErlang;
 import com.github.jonatabecker.erl.fifo.Dados;
 import com.github.jonatabecker.erl.fifo.Produtor;
 import java.awt.BorderLayout;
@@ -16,6 +17,8 @@ import javax.swing.JPanel;
  */
 public class ProdutorComponent extends JPanel {
 
+    public static final Color COLOR = Color.decode("#80cbc4");
+    
     public ProdutorComponent() {
         super();
         initGui();
@@ -23,7 +26,8 @@ public class ProdutorComponent extends JPanel {
 
     private void initGui() {
         setPreferredSize(new Dimension(0, 150));
-        setBackground(new Color(189, 189, 189));
+        setBackground(Color.WHITE);
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         setLayout(new BorderLayout());
         JLabel label = new JLabel("Produtor");
         label.setBorder(BorderFactory.createEmptyBorder(12, 5, 0, 0));
@@ -41,15 +45,16 @@ public class ProdutorComponent extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        Color color = new Color(15037299);
-        Produtor produtor;
+       
         for (int i = 0; i < Dados.get().getProdutores().size(); i++) {
-            g.setColor(color);
+            Produtor produtor = Dados.get().getProdutores().get(i);
+            g.setColor(FifoErlang.COLOR_DEFAULT);
+            if (produtor.isStatusTrabalhando()) {
+                g.setColor(COLOR);
+            }
             g.fillRect(5 + 105 * i, 40, 100, 100);
-            produtor = Dados.get().getProdutores().get(i);
             g.setColor(Color.BLACK);
             g.drawString("PID: " + produtor.getPid(), 10 + 105 * i, 55);
-            g.drawString("Status: " + produtor.getStatusString(), 10 + 105 * i, 75);
         }
     }
     

@@ -1,5 +1,7 @@
 -module(scripts).
 -export([main/0, accept/1, loop/1, run/1, fila/2, produtor/2, consumidor/2]).
+-import(lists, [map/2, filter/2]).
+
 
 -define(SIZE, 10).
 -define(TIME_PRODUTOR, 5).
@@ -49,8 +51,8 @@ run(Socket) ->
 % Processo responsável pelo gerenciamento da fila
 fila(Fifo, Key) ->
     receive
-        {Pid, push, Obj} ->
-            {Status, NewFifo} = pushFifo(Fifo, [Key,Obj]),
+        {Pid, push} ->
+            {Status, NewFifo} = pushFifo(Fifo, [Key, 0]),
             io:format("[push] Buffer atual: "),
             io:write(NewFifo),
             io:format("~n"),
@@ -61,6 +63,17 @@ fila(Fifo, Key) ->
                    Pid ! {self(), Status, Key}
             end,
             fila(NewFifo, Key + 1);
+        {Pid, update, Obj, NKey} ->
+            NewFifo = map(fun(X) ->
+                [IKey, _] = X,
+                if
+                   IKey == NKey ->
+                       [NKey, Obj];
+                   true ->
+                       X
+                end
+            end, Fifo),
+            fila(NewFifo, Key);
         {Pid, get} ->
             {Status, NewFifo, Time} = pop(Fifo),
             io:format("[get] Buffer atual: "),
@@ -93,9 +106,18 @@ pushFifo(Fifo, _) ->
 
 % Remove primeiro elemento da lista
 pop(Fifo) when length(Fifo) > 0 ->
-    [_|T] = Fifo,
-    [First | _] = Fifo,
-    {ok, T, First};
+    NewFifo = filter(fun(X) ->
+        [_, ITime] = X,
+         ITime /= 0
+    end, Fifo),
+    if
+       length(NewFifo) == 0 ->
+           {empty, Fifo, 0};
+       true ->
+           [_|T] = Fifo,
+           [First | _] = Fifo,
+           {ok, T, First}
+    end;
 % Remove primeiro elemento da lista (Fila está vazia)
 pop(Fifo) ->
     {empty, Fifo, 0}.
@@ -103,17 +125,18 @@ pop(Fifo) ->
 % Processo responsável pela produção de elementos
 produtor(PidFila, Socket) ->
     TimeProducao = rand:uniform(?TIME_PRODUTOR) * 1000,
-    io:format("[~p] Inicio producao (~p)\n", [self(), TimeProducao]),
-    gen_tcp:send(Socket, io_lib:format("iniciaProducao-~p~n", [self()])),
-    timer:sleep(TimeProducao),
-    PidFila ! {self(), push, rand:uniform(?TIME_CONSUMIDOR) * 1000},
-    io:format("[~p] Fim producao\n", [self()]),
+    PidFila ! {self(), push},
     receive
         {PidFila, full, Key} ->
              io:format("[~p] Fila cheia produtor dormindo (5000)\n", [self()]),
              gen_tcp:send(Socket, io_lib:format("finalizaProducao-~p-~p~n", [self(), Key])),
              timer:sleep(5000);
          {PidFila, ok, Key} ->
+             io:format("[~p] Inicio producao (~p)\n", [self(), TimeProducao]),
+             gen_tcp:send(Socket, io_lib:format("iniciaProducao-~p-~p~n", [self(), Key])),
+             timer:sleep(TimeProducao),
+             PidFila ! {self(), update, rand:uniform(?TIME_CONSUMIDOR) * 1000, Key},
+             io:format("[~p] Fim producao\n", [self()]),
              gen_tcp:send(Socket, io_lib:format("finalizaProducao-~p-~p~n", [self(), Key])),
              io:format("[~p] Fila ok\n", [self()])
     end,

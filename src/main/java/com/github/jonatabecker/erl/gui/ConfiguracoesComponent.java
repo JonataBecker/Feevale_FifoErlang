@@ -2,10 +2,9 @@ package com.github.jonatabecker.erl.gui;
 
 import com.github.jonatabecker.erl.Client;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -34,7 +33,7 @@ public class ConfiguracoesComponent extends JComponent {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(300, 0));
         add(buildForm(), BorderLayout.NORTH);        
-        setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.LIGHT_GRAY));
     }
     
     private void initEvents() {
@@ -49,6 +48,7 @@ public class ConfiguracoesComponent extends JComponent {
     
     private JComponent buildForm() {
         JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         panel.setLayout(new GridLayout(0, 1));
         panel.add(new JLabel("Tamanho Fila:"));
         panel.add(buildTamanhoFila());

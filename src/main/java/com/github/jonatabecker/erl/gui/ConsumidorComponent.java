@@ -1,5 +1,6 @@
 package com.github.jonatabecker.erl.gui;
 
+import com.github.jonatabecker.erl.FifoErlang;
 import com.github.jonatabecker.erl.fifo.Consumidor;
 import com.github.jonatabecker.erl.fifo.Dados;
 import java.awt.BorderLayout;
@@ -16,6 +17,8 @@ import javax.swing.JPanel;
  */
 public class ConsumidorComponent extends JPanel {
 
+    public static final Color COLOR = Color.decode("#aed581");
+    
     public ConsumidorComponent() {
         super();
         initGui();
@@ -23,7 +26,8 @@ public class ConsumidorComponent extends JPanel {
 
     private void initGui() {
         setPreferredSize(new Dimension(0, 150));
-        setBackground(new Color(224, 224, 224));
+        setBackground(Color.WHITE);
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         setLayout(new BorderLayout());
         JLabel label = new JLabel("Consumidor");
         label.setBorder(BorderFactory.createEmptyBorder(12, 5, 0, 0));
@@ -41,15 +45,15 @@ public class ConsumidorComponent extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        Color color = new Color(13951319);
-        Consumidor consumidor;
         for (int i = 0; i < Dados.get().getConsumidores().size(); i++) {
-            g.setColor(color);
+            Consumidor consumidor = Dados.get().getConsumidores().get(i);
+            g.setColor(FifoErlang.COLOR_DEFAULT);
+            if (consumidor.isTrabalhando()) {
+                g.setColor(COLOR);
+            }
             g.fillRect(5 + 105 * i, 40, 100, 100);
-            consumidor = Dados.get().getConsumidores().get(i);
             g.setColor(Color.BLACK);
             g.drawString("PID: " + consumidor.getPid(), 10 + 105 * i, 55);
-            g.drawString("Status: " + consumidor.getStatusString(), 10 + 105 * i, 75);        
         }
     }   
 
