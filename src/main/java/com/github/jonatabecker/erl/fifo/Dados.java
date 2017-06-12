@@ -1,6 +1,7 @@
 package com.github.jonatabecker.erl.fifo;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,7 +20,7 @@ public class Dados {
     private Dados() {
         this.consumidores = new TreeMap<>();
         this.produtores = new TreeMap<>();
-        this.trabalhos = new TreeMap<>();
+        this.trabalhos = new LinkedHashMap<>();
     }
     
     public static Dados get() {

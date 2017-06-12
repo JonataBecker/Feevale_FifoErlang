@@ -64,7 +64,7 @@ public class ClientDados {
         public void exec(String data) {
             String[] d = data.split("-");
             Dados.get().getProdutor(d[0]).setStatus(Produtor.STATUS_TRABALHANDO);
-            Dados.get().addTrabalho(new Trabalho(d[1], 0));
+            Dados.get().addTrabalho(new Trabalho(d[1], Integer.valueOf(d[2])));
         }
         
     }

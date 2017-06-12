@@ -20,6 +20,8 @@ public class ConfiguracoesComponent extends JComponent {
     
     private JTextField tamanhoFila;
     private JTextField quantidadeProdutores;
+    private JTextField tempoProducao;
+    private JTextField tempoTrabalho;
     private JTextField quantidadeConsumidores;
     private JButton button;
     
@@ -39,7 +41,16 @@ public class ConfiguracoesComponent extends JComponent {
     private void initEvents() {
         button.addActionListener((e) -> {
             try {
-                Client.get().init();
+                tamanhoFila.setEditable(false);
+                quantidadeProdutores.setEditable(false);
+                tempoProducao.setEditable(false);
+                tempoTrabalho.setEditable(false);
+                button.setEnabled(false);
+                Client.get().init(tamanhoFila.getText(), 
+                        quantidadeConsumidores.getText(), 
+                        quantidadeProdutores.getText(), 
+                        tempoProducao.getText(), 
+                        tempoTrabalho.getText());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -52,6 +63,10 @@ public class ConfiguracoesComponent extends JComponent {
         panel.setLayout(new GridLayout(0, 1));
         panel.add(new JLabel("Tamanho Fila:"));
         panel.add(buildTamanhoFila());
+        panel.add(new JLabel("Tempo máximo produção (segundos):"));
+        panel.add(buildTempoProducao());
+        panel.add(new JLabel("Tempo máximo trabalho (segundos):"));
+        panel.add(buildTempoTrabalho());
         panel.add(new JLabel("Quantidade de consumidores:"));
         panel.add(buildQuantidadeConsumidores());
         panel.add(new JLabel("Quantidade de produtores:"));
@@ -63,21 +78,30 @@ public class ConfiguracoesComponent extends JComponent {
     private JComponent buildTamanhoFila() {
         tamanhoFila = new JTextField();
         tamanhoFila.setText("10");
-        tamanhoFila.setEditable(false);
         return tamanhoFila;
+    }
+   
+    private JComponent buildTempoProducao() {
+        tempoProducao = new JTextField();
+        tempoProducao.setText("5");
+        return tempoProducao;
+    }
+   
+    private JComponent buildTempoTrabalho() {
+        tempoTrabalho = new JTextField();
+        tempoTrabalho.setText("5");
+        return tempoTrabalho;
     }
 
     private JComponent buildQuantidadeConsumidores() {
         quantidadeConsumidores = new JTextField();
         quantidadeConsumidores.setText("3");
-        quantidadeConsumidores.setEditable(false);
         return quantidadeConsumidores;
     }
 
     private JComponent buildQuantidadeProdutores() {
         quantidadeProdutores = new JTextField();
         quantidadeProdutores.setText("5");
-        quantidadeProdutores.setEditable(false);
         return quantidadeProdutores;
     }
     

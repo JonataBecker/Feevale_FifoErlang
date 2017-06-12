@@ -51,8 +51,15 @@ public class Client {
         }).start();
     }
 
-    public void init() throws Exception {
-        output.writeBytes("init\n");
+    public void init(String fila, String qCon, String qTra, String tPro, String tTra) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append("init-");
+        sb.append(fila).append("-");
+        sb.append(qCon).append("-");
+        sb.append(qTra).append("-");
+        sb.append(tPro).append("-");
+        sb.append(tTra).append("\n");
+        output.writeBytes(sb.toString());
     }
 
     public void close() throws Exception {

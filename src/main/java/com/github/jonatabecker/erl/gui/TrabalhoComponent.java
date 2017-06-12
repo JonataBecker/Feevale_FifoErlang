@@ -31,15 +31,19 @@ public class TrabalhoComponent extends JPanel {
             while (true) {
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {}
+                } catch (InterruptedException ex) {
+                }
                 repaint();
             }
         }).start();
-    }   
-    
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        int y = 40;
+        int c = 0;
+        
         for (int i = 0; i < Dados.get().getTrabalhos().size(); i++) {
             Trabalho trabalho = Dados.get().getTrabalhos().get(i);
             g.setColor(FifoErlang.COLOR_DEFAULT);
@@ -49,11 +53,19 @@ public class TrabalhoComponent extends JPanel {
             if (trabalho.isStatusProduzindo()) {
                 g.setColor(ProdutorComponent.COLOR);
             }
-            g.fillRect(5 + 105 * i, 40, 100, 100);
+            int width = 5 + 105 * c; 
+            
+            if (width > (getSize().width - 100)) {
+                c = 0;
+                width = 5;
+                y += 105;
+            }
+            c++;
+            g.fillRect(width, y, 100, 100);
             g.setColor(Color.BLACK);
-            g.drawString(trabalho.getId(), 10 + 105 * i, 55);
-            g.drawString(trabalho.getTempo() + " ms", 10 + 105 * i, 70);
+            g.drawString(trabalho.getId(), width + 5, y + 15);
+            g.drawString(trabalho.getTempo() + " ms", width + 5, y + 30);
         }
     }
-    
+
 }
