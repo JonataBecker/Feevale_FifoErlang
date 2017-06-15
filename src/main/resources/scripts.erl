@@ -125,13 +125,17 @@ pop(Fifo) when length(Fifo) > 0 ->
         [_, ITime] = X,
          ITime /= 0
     end, Fifo),
+
     io:format("[pop] Buffer atual: "),
     io:write(NewFifo),
     io:format("~n"),
+
+
     if
        length(NewFifo) == 0 ->
            {empty, Fifo, 0};
        true ->
+
            [First | _] = NewFifo,
            T = delete(First, Fifo),
            {ok, T, First}
